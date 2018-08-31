@@ -86,12 +86,24 @@ export default class ChartContainer extends React.Component {
 
         if (isOrdinal && ((_.findIndex(config.charts, o => o.type === 'bar')) > -1)) {
             arr = dataSets[Object.keys(dataSets)[0]] || [];
-        } else if ((_.findIndex(config.charts, o => o.type === 'bar')) > -1) {
+        } else if ((_.findIndex(config.charts, o => o.type === 'bar')) > -1 && !horizontal) {
             const found0 = _.findIndex(_.values(dataSets), (o) => {
                 if (o.length > 0) {
-                    return o[0].x === 0;
-                } else {
-                    return false;
+                    let maxOne = null;
+                    _.keys(dataSets).forEach((key) => {
+                        const max = _.maxBy(dataSets[key], o => o.x);
+                        if (!maxOne) maxOne = max.x;
+                        else if (maxOne < max) maxOne = max.x;
+                    });
+
+                    let minOne = null;
+                    _.keys(dataSets).forEach((key) => {
+                        const min = _.minBy(dataSets[key], o => o.x);
+                        if (!minOne) minOne = min.x;
+                        else if (minOne > min) minOne = min.x;
+                    });
+
+                    xDomain = [minOne, maxOne];
                 }
             });
 
