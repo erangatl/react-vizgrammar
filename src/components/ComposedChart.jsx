@@ -39,6 +39,16 @@ export default class ComposedChart extends BaseChart {
         this.handleLegendInteraction = this.handleLegendInteraction.bind(this);
     }
 
+    trimLegendLabel(characterLength, text) {
+        if (text) {
+            if (text.length > characterLength) {
+                return text.slice(0, 6) + '...' + text.slice(-(characterLength - 7));
+            } else {
+                return text + new Array(16 - text.length).join(' ');
+            }
+        }
+    }
+
     render() {
         const finalLegend = [];
         const chartComponents = [];
@@ -50,9 +60,11 @@ export default class ComposedChart extends BaseChart {
             const localChartSet = [];
             let dataSetLength = 1;
             _.keys(chart.dataSetNames).forEach((dsName) => {
+                let tmName = this.trimLegendLabel(16, dsName);
                 finalLegend.push({
-                    name: dsName,
-                    symbol: { fill: _.indexOf(ignoreArray, dsName) > -1 ? '#d3d3d3' : chart.dataSetNames[dsName] },
+                    name: tmName,
+                    fullName: dsName,
+                    symbol: { fill: _.indexOf(ignoreArray, tmName) > -1 ? '#d3d3d3' : chart.dataSetNames[dsName] },
                     chartIndex,
                 });
                 if (dataSetLength < dataSets[dsName].length) dataSetLength = dataSets[dsName].length;
@@ -74,7 +86,7 @@ export default class ComposedChart extends BaseChart {
                     },
                 };
 
-                if (_.indexOf(ignoreArray, dsName) === -1) {
+                if (_.indexOf(ignoreArray, tmName) === -1) {
                     localChartSet.push(component[chart.type]());
                 }
             });

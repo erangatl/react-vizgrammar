@@ -64,13 +64,14 @@ export default class AreaChart extends BaseChart {
         chartArray.forEach((chart, chartIndex) => {
             const localChartComp = [];
             _.keys(chart.dataSetNames).forEach((dsName) => {
+                let tmName = this.trimLegendLabel(16, dsName);
                 legendComponents.push({
-                    name: this.trimLegendLabel(16, dsName),
+                    name: tmName,
                     fullName: dsName,
-                    symbol: { fill: _.indexOf(ignoreArray, dsName) > -1 ? '#d3d3d3' : chart.dataSetNames[dsName] },
+                    symbol: { fill: _.indexOf(ignoreArray, tmName) > -1 ? '#d3d3d3' : chart.dataSetNames[dsName] },
                     chartIndex,
                 });
-                if (_.indexOf(ignoreArray, dsName) === -1) {
+                if (_.indexOf(ignoreArray, tmName) === -1) {
                     localChartComp.push(
                         AreaChart
                             .getComponent(config, chartIndex, xScale, dataSets[dsName],

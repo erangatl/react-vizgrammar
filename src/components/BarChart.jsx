@@ -104,10 +104,11 @@ export default class BarChart extends BaseChart {
         chartArray.forEach((chart, chartIndex) => {
             const localSet = [];
             _.keys(chart.dataSetNames).forEach((dsName) => {
+                let tmName = this.trimLegendLabel(16, dsName);
                 legendComponents.push({
-                    name: this.trimLegendLabel(16, dsName),
+                    name: tmName,
                     fullName: dsName,
-                    symbol: { fill: _.indexOf(ignoreArray, dsName) > -1 ? '#d3d3d3' : chart.dataSetNames[dsName] },
+                    symbol: { fill: _.indexOf(ignoreArray, tmName) > -1 ? '#d3d3d3' : chart.dataSetNames[dsName] },
                     chartIndex,
                 });
 
@@ -126,7 +127,7 @@ export default class BarChart extends BaseChart {
                 }
 
                 if (dataSetLength < dataSets[dsName].length) dataSetLength = dataSets[dsName].length;
-                if ((_.indexOf(ignoreArray, dsName)) === -1) {
+                if ((_.indexOf(ignoreArray, tmName)) === -1) {
                     localSet.push((
                         BarChart.getComponent(config, chartIndex, xScale, dataSets[dsName],
                             chart.dataSetNames[dsName], onClick, currentTheme)

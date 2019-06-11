@@ -64,13 +64,14 @@ export default class LineChart extends BaseChart {
 
         chartArray.forEach((chart, chartIndex) => {
             _.keys(chart.dataSetNames).forEach((dsName) => {
+                let tmName = this.trimLegendLabel(16, dsName);
                 legendComponents.push({
-                    name: this.trimLegendLabel(16, dsName),
+                    name: tmName,
                     fullName: dsName,
-                    symbol: { fill: _.indexOf(ignoreArray, dsName) > -1 ? '#d3d3d3' : chart.dataSetNames[dsName] },
+                    symbol: { fill: _.indexOf(ignoreArray, tmName) > -1 ? '#d3d3d3' : chart.dataSetNames[dsName] },
                     chartIndex,
                 });
-                if (_.indexOf(ignoreArray, dsName) === -1) {
+                if (_.indexOf(ignoreArray, tmName) === -1) {
                     chartComponents.push(...LineChart
                         .getComponent(config, chartIndex, xScale, dataSets[dsName], chart.dataSetNames[dsName],
                             onClick, currentTheme));
